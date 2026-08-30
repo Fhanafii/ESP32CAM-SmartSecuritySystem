@@ -69,6 +69,15 @@ def home():
     responses:
       200:
         description: API is running successfully
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+              example: ok
+            service:
+              type: string
+              example: Monitoring API
     """
     return jsonify({
         "status":"ok",
@@ -114,10 +123,52 @@ def get_detections():
     responses:
       200:
         description: List of paginated detections
+        schema:
+          type: object
+          properties:
+            success:
+              type: boolean
+              example: true
+            page:
+              type: integer
+              example: 1
+            limit:
+              type: integer
+              example: 20
+            total:
+              type: integer
+              example: 100
+            total_pages:
+              type: integer
+              example: 5
+            count:
+              type: integer
+              example: 20
+            data:
+              type: array
+              items:
+                type: object
       400:
         description: Invalid parameters / keyword too long
+        schema:
+          type: object
+          properties:
+            success:
+              type: boolean
+              example: false
+            message:
+              type: string
+              example: Keyword terlalu panjang
       500:
         description: Server error
+        schema:
+          type: object
+          properties:
+            success:
+              type: boolean
+              example: false
+            message:
+              type: string
     """
 
     try:
@@ -178,8 +229,25 @@ def dashboard():
     responses:
       200:
         description: Dashboard statistics data retrieved successfully
+        schema:
+          type: object
+          properties:
+            success:
+              type: boolean
+              example: true
+            data:
+              type: object
+              description: Statistik ringkasan data dari database
       500:
         description: Server error
+        schema:
+          type: object
+          properties:
+            success:
+              type: boolean
+              example: false
+            message:
+              type: string
     """
 
     try:
@@ -211,10 +279,45 @@ def get_detection(detection_id):
     responses:
       200:
         description: Detection detail retrieved successfully
+        schema:
+          type: object
+          properties:
+            success:
+              type: boolean
+              example: true
+            data:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                images:
+                  type: array
+                  items:
+                    type: object
+                video:
+                  type: object
       404:
         description: Data not found
+        schema:
+          type: object
+          properties:
+            success:
+              type: boolean
+              example: false
+            message:
+              type: string
+              example: Data tidak ditemukan
       500:
         description: Server error
+        schema:
+          type: object
+          properties:
+            success:
+              type: boolean
+              example: false
+            message:
+              type: string
     """
 
     try:
@@ -264,10 +367,52 @@ def detection_files(detection_id):
     responses:
       200:
         description: Files list retrieved successfully
+        schema:
+          type: object
+          properties:
+            success:
+              type: boolean
+              example: true
+            batch_folder:
+              type: string
+            batch_number:
+              type: integer
+            images:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  url:
+                    type: string
+            video:
+              type: object
+              properties:
+                name:
+                  type: string
+                url:
+                  type: string
       404:
         description: Data or folder not found
+        schema:
+          type: object
+          properties:
+            success:
+              type: boolean
+              example: false
+            message:
+              type: string
       500:
         description: Server error
+        schema:
+          type: object
+          properties:
+            success:
+              type: boolean
+              example: false
+            message:
+              type: string
     """
 
     try:
