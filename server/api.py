@@ -8,11 +8,28 @@ from datetime import datetime
 from flask import Flask
 from flask import jsonify
 from flask import request
+from flasgger import Swagger
 
 from config import ALLOWED_ORIGINS, API_BASE_URL
 from database import Database
 
 app = Flask(__name__)
+
+swagger_template = {
+    "swagger": "2.0",
+    "info": {
+        "title": "ESP32CAM Monitoring API",
+        "description": "Dokumentasi API untuk sistem monitoring ESP32CAM dengan database PostgreSQL",
+        "version": "1.0.0"
+    },
+    "host": "api-monitor.fhanafii.my.id",
+    "schemes": [
+        "https",
+        "http"
+    ]
+}
+
+swagger = Swagger(app, template=swagger_template)
 
 db = Database()
 
@@ -46,7 +63,13 @@ def serialize(data):
 
 @app.route("/")
 def home():
-
+    """
+    API Root Status
+    ---
+    responses:
+      200:
+        description: API is running successfully
+    """
     return jsonify({
         "status":"ok",
         "service":"Monitoring API"
@@ -54,6 +77,48 @@ def home():
 
 @app.route("/api/detections", methods=["GET"])
 def get_detections():
+    """
+    Get paginated and filtered detections list
+    ---
+    parameters:
+      - name: page
+        in: query
+        type: integer
+        required: false
+        description: Page number (default 1)
+      - name: limit
+        in: query
+        type: integer
+        required: false
+        description: Items per page (default 20, max 50)
+      - name: status
+        in: query
+        type: string
+        required: false
+        description: Filter by detection status
+      - name: start
+        in: query
+        type: string
+        required: false
+        description: Start date filter (YYYY-MM-DD)
+      - name: end
+        in: query
+        type: string
+        required: false
+        description: End date filter (YYYY-MM-DD)
+      - name: keyword
+        in: query
+        type: string
+        required: false
+        description: Search keyword or query
+    responses:
+      200:
+        description: List of paginated detections
+      400:
+        description: Invalid parameters / keyword too long
+      500:
+        description: Server error
+    """
 
     try:
         page = int(request.args.get("page", 1, type=int))
@@ -107,6 +172,15 @@ def get_detections():
 
 @app.route("/api/dashboard")
 def dashboard():
+    """
+    Get dashboard statistics data
+    ---
+    responses:
+      200:
+        description: Dashboard statistics data retrieved successfully
+      500:
+        description: Server error
+    """
 
     try:
         data = db.get_dashboard()
@@ -124,6 +198,24 @@ def dashboard():
 
 @app.route("/api/detections/<uuid:detection_id>", methods=["GET"])
 def get_detection(detection_id):
+    """
+    Get detection detail by UUID including media list
+    ---
+    parameters:
+      - name: detection_id
+        in: path
+        type: string
+        format: uuid
+        required: true
+        description: Detection UUID
+    responses:
+      200:
+        description: Detection detail retrieved successfully
+      404:
+        description: Data not found
+      500:
+        description: Server error
+    """
 
     try:
         detection = db.get_by_id(str(detection_id))
@@ -159,6 +251,24 @@ def get_detection(detection_id):
 
 @app.route("/api/detections/<uuid:detection_id>/files")
 def detection_files(detection_id):
+    """
+    Get list of image and video files associated with a detection
+    ---
+    parameters:
+      - name: detection_id
+        in: path
+        type: string
+        format: uuid
+        required: true
+        description: Detection UUID
+    responses:
+      200:
+        description: Files list retrieved successfully
+      404:
+        description: Data or folder not found
+      500:
+        description: Server error
+    """
 
     try:
         data = db.get_files_info(str(detection_id))
