@@ -1,7 +1,7 @@
 import json
 import os
 
-from flask import send_from_directory
+from flask import redirect, send_from_directory
 from uuid import UUID
 from decimal import Decimal
 from datetime import datetime
@@ -63,26 +63,7 @@ def serialize(data):
 
 @app.route("/")
 def home():
-    """
-    API Root Status
-    ---
-    responses:
-      200:
-        description: API is running successfully
-        schema:
-          type: object
-          properties:
-            status:
-              type: string
-              example: ok
-            service:
-              type: string
-              example: Monitoring API
-    """
-    return jsonify({
-        "status":"ok",
-        "service":"Monitoring API"
-    })
+    return redirect("/apidocs/")
 
 @app.route("/api/detections", methods=["GET"])
 def get_detections():

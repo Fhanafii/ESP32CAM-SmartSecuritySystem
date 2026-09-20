@@ -19,6 +19,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Monitoring Deteksi",
   description: "Monitoring Sistem Keamanan Otomatis Berbasis IoT",
+  icons: { icon: "/iotmonitoring.svg" },
 };
 
 export default function RootLayout({
