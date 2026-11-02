@@ -29,18 +29,6 @@ export function Header({
         </div>
 
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-          <a
-            href="https://www.whatsapp.com/channel/0029VbCl5LWDp2Q8JJ204U1c"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Ikuti WhatsApp Channel"
-            title="Ikuti WhatsApp Channel"
-            className="inline-flex h-9 items-center justify-center gap-2 rounded-md border border-green-600/30 bg-green-600/10 px-2.5 text-sm font-medium text-green-700 transition-colors hover:bg-green-600/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 dark:text-green-400 sm:px-3"
-          >
-            <MessageCircle className="h-4 w-4 shrink-0" aria-hidden="true" />
-            <span className="hidden sm:inline">Ikuti WhatsApp Channel</span>
-          </a>
-
           <div className="relative w-24 sm:w-56 lg:w-80">
 
           <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -53,6 +41,18 @@ export function Header({
           />
 
           </div>
+
+          <a
+            href="https://www.whatsapp.com/channel/0029VbCl5LWDp2Q8JJ204U1c"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Ikuti WhatsApp Channel"
+            title="Ikuti WhatsApp Channel"
+            className="inline-flex h-9 items-center justify-center gap-2 rounded-md border border-green-600/30 bg-green-600/10 px-2.5 text-sm font-medium text-green-700 transition-colors hover:bg-green-600/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 dark:text-green-400 sm:px-3"
+          >
+            <MessageCircle className="h-4 w-4 shrink-0" aria-hidden="true" />
+            <span className="hidden sm:inline">Ikuti WhatsApp Channel</span>
+          </a>
         </div>
 
       </div>
