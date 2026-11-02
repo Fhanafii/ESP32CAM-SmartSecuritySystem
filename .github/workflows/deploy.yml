@@ -9,22 +9,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # Diperbarui ke v4 (terbaru dan lebih stabil)
 
       - name: Tailscale
-        uses: tailscale/github-action@v2
+        uses: tailscale/github-action@v3 # Diperbarui ke v3 (mendukung node baru lebih baik)
         with:
           oauth-client-id: ${{ secrets.TS_OAUTH_ID }}
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:ci
 
       - name: Deploy to Server via SSH
-        uses: appleboy/ssh-action@v1.0.3
+        uses: appleboy/ssh-action@v1.2.0 # Diperbarui ke v1.2.0 untuk opsi timeout yang lebih baik
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
+          command_timeout: 15m # Mencegah deployment menggantung tanpa batas jika koneksi macet
           script: |
             set -e
             cd ~/ESP32CAM
