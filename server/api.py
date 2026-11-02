@@ -184,6 +184,12 @@ def get_detections():
             keyword=keyword
         )
 
+        rows = serialize(result["rows"])
+        for row in rows:
+            row["preview_image_url"] = build_preview_image_url(
+                row.get("batch_folder")
+            )
+
         return jsonify({
             "success": True,
             "page": result["page"],
@@ -191,7 +197,7 @@ def get_detections():
             "total": result["total"],
             "total_pages": result["total_pages"],
             "count": len(result["rows"]),
-            "data": serialize(result["rows"])
+            "data": rows
 
         })
 
@@ -496,6 +502,25 @@ def build_media(batch_folder, batch_number):
             }
 
     return images, video
+
+
+def build_preview_image_url(batch_folder):
+    """Return the URL of a representative detected frame for a batch."""
+    if not batch_folder:
+        return None
+
+    absolute_folder = os.path.abspath(batch_folder)
+    if not os.path.isdir(absolute_folder):
+        return None
+
+    detected_frames = sorted(
+        file for file in os.listdir(absolute_folder)
+        if file.lower().endswith(".jpg") and "_detected" in file.lower()
+    )
+    if not detected_frames:
+        return None
+
+    return f"{API_BASE_URL}/api/files/{batch_folder}/{detected_frames[0]}"
 
 if __name__=="__main__":
 

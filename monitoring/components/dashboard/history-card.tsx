@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
 import {
     Card,
     CardContent,
@@ -14,6 +17,7 @@ interface Props{
 export function HistoryCard({
     detection,
 }:Props){
+    const [imageFailed, setImageFailed] = useState(false);
 
     return(
         <Link href={`/detections/${detection.id}`}>
@@ -22,8 +26,20 @@ export function HistoryCard({
 
                 <CardContent className="flex items-center gap-4 p-4">
 
-                    <div className="flex h-20 w-20 items-center justify-center rounded-lg bg-muted">
-                        No Image
+                    <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-muted">
+                        {detection.preview_image_url && !imageFailed ? (
+                            <img
+                                src={detection.preview_image_url}
+                                alt={`Frame terdeteksi batch #${detection.batch_number}`}
+                                className="h-full w-full object-cover"
+                                loading="lazy"
+                                onError={() => setImageFailed(true)}
+                            />
+                        ) : (
+                            <span className="px-1 text-center text-xs text-muted-foreground">
+                                No Image
+                            </span>
+                        )}
                     </div>
 
                     <div className="flex-1">

@@ -7,6 +7,7 @@ export interface Detection {
   id: string;
   batch_number: number;
   batch_folder: string;
+  preview_image_url?: string | null;
   detected_at: string;
   total_frames: number;
   detected_frames: number;
